@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="20dp"
+    tools:context=".Fragments.InitiallyFragment"
+    android:layout_centerHorizontal="true"
+    tools:viewBindingIgnore="false"
+    android:background="#FFEB3B"
+    >
+
+
+    <TextView
+        android:id="@+id/Welcome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome Back !"
+        android:textSize="28dp"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:id="@+id/logintext"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login with Username and Password"
+         android:layout_below="@+id/Welcome"/>
+
+    <RelativeLayout
+        android:id="@+id/layout2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logintext"
+        android:layout_marginTop="40dp"
+        android:padding="30dp"
+        android:background="#FFEB3B"
+        android:layout_centerHorizontal="true"
+        android:outlineSpotShadowColor="@color/common_google_signin_btn_text_dark"
+        android:outlineAmbientShadowColor="@color/common_google_signin_btn_text_dark_focused">
+
+
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"/>
+
+        <EditText
+            android:id="@+id/usernameinput"
+            android:layout_width="260dp"
+            android:background="@color/white"
+            android:layout_height="40dp"
+            android:layout_below="@id/username"/>
+
+        <TextView
+            android:id="@+id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="Password"
+            android:layout_below="@id/usernameinput"/>
+
+        <EditText
+            android:id="@+id/passwordinput"
+            android:layout_width="260dp"
+            android:layout_height="40dp"
+            android:background="@color/white"
+            android:layout_below="@id/password"/>
+
+        <Button
+            android:id="@+id/signinbtn"
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:layout_margin="30dp"
+            android:layout_below="@+id/passwordinput"
+            android:text="SIGN IN"
+            />
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="73dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="168dp"
+        android:padding="20dp"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Create a new account?"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/initialSingUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="5dp"
+            android:text="Sign Up"
+            android:textColor="#2196F3"
+            app:layout_constraintStart_toEndOf="@+id/create"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</RelativeLayout>
