@@ -1,6 +1,7 @@
 package com.example.tasks.Adapters
 
 import android.graphics.drawable.Icon
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,9 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.DataClass.ItemDataClass
 import com.example.tasks.R
 import com.squareup.picasso.Picasso
+import java.net.URI
+import java.net.URL
 
 class ItemAdapterclass(var datas:List<ItemDataClass>): RecyclerView.Adapter<ItemAdapterclass.ViewHolder>() {
 
+
+
+    var a:((Int)->(Unit))?=null
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
 
     class ViewHolder(ItemView: View): RecyclerView.ViewHolder(ItemView){
         val image: ImageView = itemView.findViewById(R.id.ImageV)
@@ -34,9 +43,12 @@ class ItemAdapterclass(var datas:List<ItemDataClass>): RecyclerView.Adapter<Item
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         var data = datas[position]
 
-        Picasso.get().load(data.image).into( holder.image);
+        Picasso.get().load(Uri.parse(data.image)).into(holder.image);
         holder.title.text = data.title
         holder.amount.text = data.amount
+        holder.itemView.setOnClickListener{
+            a?.invoke(position)
+        }
 
     }
 

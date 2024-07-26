@@ -8,18 +8,22 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tasks.Adapters.ItemAdapterclass
 import com.example.tasks.DataClass.ItemDataClass
 import com.example.tasks.R
+import com.example.tasks.ViewModels.GoodAddViewModel
+import com.example.tasks.databinding.FragmentGoodsBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import kotlin.reflect.typeOf
@@ -36,12 +40,11 @@ private const val ARG_PARAM2 = "param2"
  * Use the [GoodsFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GoodsFragment : Fragment() {
+class GoodsFragment : Fragment(), ItemAdapterclass.OnItemClickListener {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     lateinit var _data :MutableList<ItemDataClass>
-    lateinit var firebase:FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,29 +59,36 @@ class GoodsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_goods, container, false)
 
-        val recycle = view.findViewById<RecyclerView>(R.id.recycle)
-
-
-        _data = mutableListOf<ItemDataClass>()
-        CoroutineScope(Dispatchers.IO).launch {
-            val data = getDatas()
-            withContext(Dispatchers.Main) {
-                data.forEach(){
-                    item->
-                    _data.add(item)
-                }
-
-                recycle.layoutManager = GridLayoutManager(context, 2)
-                recycle.adapter = ItemAdapterclass(_data.toList())
-                Log.d("Data1452", data.toString())
-            }
-        }
-
-
+        var view =inflater.inflate(R.layout.fragment_goods, container, false)
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        var recycle = view.findViewById<RecyclerView>(R.id.recycle)
+
+        _data = mutableListOf<ItemDataClass>()
+        var vm = GoodAddViewModel()
+        lateinit var adapter:ItemAdapterclass
+
+ lifecycleScope.launch {
+     val data = vm.getDatas()
+     withContext(Dispatchers.Main) {
+         data.forEach() { item ->
+             _data.add(item)
+         }
+     }
+
+     adapter = ItemAdapterclass(_data)
+     recycle.layoutManager = GridLayoutManager(context, 2)
+     recycle.adapter = adapter
+     super.onViewCreated(view, savedInstanceState)
+     adapter.a = {
+         Toast.makeText(context, "Click is Working", Toast.LENGTH_LONG).show()
+     }
+ }
     }
 
     companion object {
@@ -101,23 +111,8 @@ class GoodsFragment : Fragment() {
             }
     }
 
-    suspend fun getDatas(): List<ItemDataClass> {
-        val db = FirebaseFirestore.getInstance()
-        val datas = mutableListOf<ItemDataClass>()
-
-        try {
-            val result = db.collection("items").get().await()
-            for (document in result) {
-                val item = document.toObject(ItemDataClass::class.java)
-                datas.add(item)
-            }
-        } catch (e: Exception) {
-            Log.w("Data111", "Error getting documents.", e)
-        }
-
-        return datas
+    override fun onItemClick(position: Int){
     }
-
 
 
 }

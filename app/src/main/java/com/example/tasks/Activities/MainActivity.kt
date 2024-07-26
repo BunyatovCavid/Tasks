@@ -16,20 +16,22 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainer
 import androidx.fragment.app.FragmentContainerView
 import androidx.transition.Visibility
+import com.example.tasks.Adapters.ItemAdapterclass
 import com.example.tasks.Fragments.BookFragment
 import com.example.tasks.Fragments.GoodsFragment
 import com.example.tasks.Fragments.HomeFragment
 import com.example.tasks.Fragments.InitiallyFragment
 import com.example.tasks.Fragments.SingUpFragment
 import com.example.tasks.R
+import com.example.tasks.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.CustomKeysAndValues
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
-    lateinit var bottomNav : BottomNavigationView
+    lateinit var bottomNav:BottomNavigationView
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,8 +39,9 @@ class MainActivity : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         loadFragment(HomeFragment())
-        bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
-        bottomNav.setOnItemSelectedListener {
+
+            var bottomNav = findViewById(R.id.bottomNav) as BottomNavigationView
+            bottomNav.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.home -> {
                     loadFragment(HomeFragment())
@@ -51,11 +54,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.books -> {
                     loadFragment(BookFragment())
-                    throw RuntimeException("Test Crash")
-                    var crash = FirebaseCrashlytics.getInstance()
-                    crash.log("Crash Log")
-                    crash.setCustomKey("Key1","Value1")
-                    crash.setCustomKey("Key2","Value2")
                     true
                 }
                 else->{
@@ -63,11 +61,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-//        addContentView(bottomNav, ViewGroup.LayoutParams(
-//            ViewGroup.LayoutParams.MATCH_PARENT,
-//            ViewGroup.LayoutParams.WRAP_CONTENT))
-
 
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -82,8 +75,6 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.container,fragment)
         transaction.commit()
     }
-
-
 
 
 }

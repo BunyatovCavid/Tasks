@@ -2,6 +2,7 @@ package com.example.tasks.Fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +10,13 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.text.set
 import androidx.fragment.app.Fragment
 import com.example.tasks.Activities.MainActivity
 import com.example.tasks.R
+import com.example.tasks.ViewModels.AuthorizationViewModel
+import com.example.tasks.databinding.FragmentGoodsBinding
+import com.example.tasks.databinding.FragmentInitiallyBinding
 import com.google.firebase.auth.FirebaseAuth
 
 
@@ -32,7 +37,7 @@ class InitiallyFragment : Fragment() {
     private var param2: String? = null
 
     lateinit var firebaseauth: FirebaseAuth
-    lateinit var btn:Button
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,22 +51,28 @@ class InitiallyFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view =inflater.inflate(R.layout.fragment_initially, container, false)
-        btn = view.findViewById<Button>(R.id.signinbtn)
+
+//        var parent = container!!.parent
+//        parent.clearChildFocus(container)
+
+        var view  = inflater.inflate(R.layout.fragment_initially, container, false)
+        var vm = AuthorizationViewModel()
+
+        var btn = view.findViewById<Button>(R.id.loginbtn)
         var go = view.findViewById<TextView>(R.id.initialSingUp)
-
-
-        var parent = container!!.parent
-        parent.clearChildFocus(container)
-
 
         btn.setOnClickListener{
             firebaseauth = FirebaseAuth.getInstance()
-            var email = view.findViewById<EditText>(R.id.usernameinput).text.toString()
+            var name =view.findViewById<EditText>(R.id.usernameinput)
+            var pass = view.findViewById<EditText>(R.id.passwordinput)
+            var email = name.text.toString()
             var password = view.findViewById<EditText>(R.id.passwordinput).text.toString()
-            SingIn(email, password)
+            name.text.clear()
+            pass.text.clear()
+            vm.SingIn(email, password, this)
 
         }
+
         go.setOnClickListener(){
             val transaction = parentFragmentManager.beginTransaction()
             transaction.replace(R.id.containerMain3,SingUpFragment())
@@ -93,23 +104,6 @@ class InitiallyFragment : Fragment() {
             }
     }
 
-    private fun SingIn( email:String, password:String) {
-        firebaseauth.signInWithEmailAndPassword(email,password)
-            .addOnCompleteListener(){task->
-                if(task.isSuccessful)
-                {
-                   var intent = Intent(context, MainActivity::class.java)
-                    startActivity(intent)
-                    Toast.makeText(context, "SingIn is Successful", Toast.LENGTH_LONG).show()
-                }
-                else
-                {
-                    Toast.makeText(context, "SingIn is Failed", Toast.LENGTH_LONG ).show()
-                }
-
-            }
-
-    }
 
 
 }

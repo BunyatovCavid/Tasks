@@ -14,6 +14,8 @@ import android.widget.Toast
 import com.example.tasks.Activities.MainActivity
 import com.example.tasks.Activities.MainActivity3
 import com.example.tasks.R
+import com.example.tasks.ViewModels.AuthorizationViewModel
+import com.example.tasks.databinding.FragmentSingUpBinding
 import com.google.firebase.auth.FirebaseAuth
 
 // TODO: Rename parameter arguments, choose names that match
@@ -45,13 +47,23 @@ class SingUpFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view =inflater.inflate(R.layout.fragment_sing_up, container, false)
 
-        var btn = view.findViewById<Button>(R.id.signup)
-        var go = view.findViewById<TextView>(R.id.initialSingIn)
+       var view = inflater.inflate(R.layout.fragment_sing_up, container,false)
+
+        var btn = view.findViewById<Button>(R.id.registerbtn)
+        var go = view.findViewById<TextView>(R.id.initialSingUp)
+
+        var vm = AuthorizationViewModel()
+
+
+        btn.setOnClickListener{
+            firebaseauth = FirebaseAuth.getInstance()
+            var email = view.findViewById<EditText>(R.id.usernameinput2).text.toString()
+            var password = view.findViewById<EditText>(R.id.passwordinput2).text.toString()
+            vm.SignUp(email, password, this)
+        }
 
         go.setOnClickListener{
-
             Log.d("Test", "Click listener is working")
             val transaction =requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.containerMain3,InitiallyFragment())
@@ -59,15 +71,8 @@ class SingUpFragment : Fragment() {
         }
 
 
-        btn.setOnClickListener{
-            firebaseauth = FirebaseAuth.getInstance()
-            var email = view.findViewById<EditText>(R.id.usernameinput2).text.toString()
-            var password =  view.findViewById<EditText>(R.id.passwordinput2).text.toString()
-            SignUp(email, password)
-        }
 
-
-        return inflater.inflate(R.layout.fragment_sing_up, container, false)
+        return view
     }
 
     companion object {
@@ -91,23 +96,6 @@ class SingUpFragment : Fragment() {
     }
 
 
-    private  fun SignUp(email:String, password: String)
-    {
-        firebaseauth.createUserWithEmailAndPassword(email,password)
-            .addOnCompleteListener(){task->
-                if(task.isSuccessful)
-                {
-                    val transaction = parentFragmentManager.beginTransaction()
-                    transaction.replace(R.id.containerMain3,InitiallyFragment())
-                    transaction.commit()
-                }
-                else
-                {
-                    Toast.makeText(context, "SingUp is Failed", Toast.LENGTH_LONG ).show()
-                }
-
-            }
-    }
 
 
 }
