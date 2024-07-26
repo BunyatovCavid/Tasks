@@ -2,6 +2,7 @@ package com.example.tasks.Fragments
 
 import android.annotation.SuppressLint
 import android.content.ClipData.Item
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
+import androidx.fragment.app.replace
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -86,7 +89,18 @@ class GoodsFragment : Fragment(), ItemAdapterclass.OnItemClickListener {
      recycle.adapter = adapter
      super.onViewCreated(view, savedInstanceState)
      adapter.a = {
-         Toast.makeText(context, "Click is Working", Toast.LENGTH_LONG).show()
+        var bundle:Bundle = Bundle()
+         bundle.putString("itemtitle", adapter.datas[it].title)
+         bundle.putString("itemimage",adapter.datas[it].image)
+         var detailfrg:GoodDetailFragment = GoodDetailFragment()
+         detailfrg.arguments = bundle
+         fragmentManager?.beginTransaction()?.replace(R.id.container, detailfrg)?.commit()
+
+
+//        var intent = Intent(context, GoodDetailFragment::class.java)
+//         var bundle = bundleOf("data" to adapter.datas[it])
+//         intent.putExtras(bundle)
+//         startActivity(intent)
      }
  }
     }
